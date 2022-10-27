@@ -1,4 +1,7 @@
 \documentclass[PMO,authoryear,toc]{lsstdoc}
+\usepackage[cache=false]{minted}
+% !TeX TXS-program:compile = txs:///pdflatex/[-shell-escape]
+
 \input{meta}
 
 % Package imports go here.
@@ -45,6 +48,36 @@ Requirements and restrictions for services deployment upon Rubin Kubernetes clus
 \maketitle
 
 \section{Pods}\label{sec:pod}
+
+\subsection{Resource \code{requests} and \code{limits}}
+
+All containers within a pod SHALL declare resource requests and limits for memory and cpu.
+
+XXX does this requirement include initContainers?
+
+\subsubsection{Example \code{podSpec} fragment}
+
+\begin{minted}{yaml}
+    resources:
+      limits:
+        cpu: "2"
+        memory: 12Gi
+      requests:
+        cpu: "1"
+        memory: 8Gi
+\end{minted}
+
+Containers should set a fairly conservative limits to prevent suddent load spikes impacting other pods schedule upon the same node.
+
+\subsubsection{Maxmimum Allowed Limits}
+
+\begin{center}
+\begin{tabular}{|l|l|}
+\hline
+    \bf cpu & \bf memory \\ \hline
+    8 & 32Gi \\ \hline
+\end{tabular}
+\end{center}
 
 \appendix
 % Include all the relevant bib files.
