@@ -79,6 +79,35 @@ Containers should set a fairly conservative limits to prevent suddent load spike
 \end{tabular}
 \end{center}
 
+\subsection{Priviledged Containers}
+
+Privileged \code{containters} and \code{initContainers} SHALL be used only by the infrastructure team to provide platform level services.
+
+This restriction is suspended for \code{initContainers} in pods which are using multus to connect to DDS until either the need for the \code{lsstit/ddsnet4u initContainer} is removed or DDS is retired.
+
+\subsubsection{Example podSpec fragment}
+
+\begin{minted}{yaml}
+    securityContext:
+      privileged: false
+\end{minted}
+
+\subsubsection{Discussion}
+
+Common community provided deployments have been identified which use \code{priviledged initContainers} to modify non-namespaced sysctls which will affect all containers run upon the node and have the potential to make the system unstable.
+
+Example:
+
+\begin{minted}{yaml}
+      initContainers:
+      - command:
+        - sysctl
+        - -w
+        - vm.max_map_count=262144
+        securityContext:
+          privileged: true
+\end{minted}
+
 \appendix
 % Include all the relevant bib files.
 % https://lsst-texmf.lsst.io/lsstdoc.html#bibliographies
