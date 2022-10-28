@@ -118,6 +118,22 @@ The usage of \code{PodSecurityPolicy} would prevent routine updates to k8s >= 1.
 
 \section{Services}\label{sec:svc}
 
+\subsection{Service Types}
+
+The following service types SHALL be allowed:
+
+\begin{itemize}
+  \item \code{ClusterIP}
+  \item \code{ExternalName}
+  \item \code{LoadBalancer}
+\end{itemize}
+
+The \code{NodePort} service type SHALL NOT be used.
+
+\subsubsection{Discussion}
+
+The \code{NodePort} service type bypasses the CNI overlay and the pool of external IPs allocated for use by \code{LoadBalancer} services.
+
 \appendix
 % Include all the relevant bib files.
 % https://lsst-texmf.lsst.io/lsstdoc.html#bibliographies
