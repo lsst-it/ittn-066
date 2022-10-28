@@ -116,6 +116,14 @@ Example:
 
 The usage of \code{PodSecurityPolicy} would prevent routine updates to k8s >= 1.25.
 
+\subsection{\code{hostPath} Volumes}
+
+\code{hostPath} volumes SHALL NOT be used.
+
+\subsubsection{Discussion}
+
+\code{hostPath} allows access to filesystems mounted on the host. This potentially allows the container to access secrets such as \code{/etc/shadow}, escape the container via \code{/var/run/docker.sock}, modify kernel parameters via \code{/proc}, \code{/sys}, \code{/dev}, and/or edit configuration files.
+
 \section{Services}\label{sec:svc}
 
 \subsection{Service Types}
