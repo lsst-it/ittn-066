@@ -144,6 +144,14 @@ The \code{NodePort} service type bypasses the CNI overlay and the pool of extern
 
 \section{Namespaces}\label{sec:ns}
 
+\subsection{\code{default} namespace}
+
+The \code{default} namespace SHALL NOT be used.
+
+\subsubsection{Discussion}
+
+Resources being created within the \code{default} namespace is often an indication that a namespace was not properly specified for a deployment. It is also preferable to keep services contained within their own \code{ns} rather than mixed together in a common \code{ns}.
+
 \appendix
 % Include all the relevant bib files.
 % https://lsst-texmf.lsst.io/lsstdoc.html#bibliographies
