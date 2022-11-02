@@ -47,6 +47,14 @@ Requirements and restrictions for services deployment upon Rubin Kubernetes clus
 % Create the title page.
 \maketitle
 
+\section{Introduction}\label{sec:intro}
+
+By default, Kubernetes allows pods to be configured to bypass a number of isolation abstractions.
+These ``escape hatches`` are an important mechanism to allow core k8s functionality to itself be deployed on top of k8s.
+However, in the interest of maintaining security proprieties, we need to restrict access to these features to the ``k8s platform team`` by policy.
+
+In addition, to promote a stable system which provides consistent and predictable service, there is motivation to restrict resource usage such as requiring that all pods declare resource requests and limits.
+
 \section{Pods}\label{sec:pod}
 
 \subsection{Resource \code{requests} and \code{limits}}
