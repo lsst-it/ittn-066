@@ -136,6 +136,46 @@ The usage of \code{PodSecurityPolicy} would prevent routine updates to k8s >= 1.
 
 \code{hostPath} allows access to filesystems mounted on the host. This potentially allows the container to access secrets such as \code{/etc/shadow}, escape the container via \code{/var/run/docker.sock}, modify kernel parameters via \code{/proc}, \code{/sys}, \code{/dev}, and/or edit configuration files.
 
+\subsection{Linux/Host Namespaces}
+
+Kubernetes allows pods to ``opt-out`` of various Linux kernel namespaces which are the basis of container isolation.
+
+Pods SHALL NOT set any of these \code{podSpec} keys to \code{true}:
+
+\begin{itemize}
+  \item \code{hostIPC}
+  \item \code{hostNetwork}
+  \item \code{hostPID}
+\end{itemize}
+
+Pods SHALL NOT set any of these \code{podSpec} keys to \code{false}:
+
+\begin{itemize}
+  \item \code{hostUsers}
+\end{itemize}
+
+Pods MAY set \code{hostUsers} to \code{true} but it is NOT RECOMMENDED.
+
+\subsubsection{Example of forbiden podSpec fragment}
+
+\begin{minted}{yaml}
+  hostIPC: true
+  hostNetwork: true
+  hostPID: true
+  hostUsers: false
+\end{minted}
+
+\subsubsection{Example of allowed but discouraged podSpec fragment}
+
+\begin{minted}{yaml}
+  hostUsers: true
+\end{minted}
+
+\subsubsection{Discussion}
+
+As of k8s 1.25, \code{true} is the default value.
+If k8s \code{userns} support reaches ``GA`` in a future release, it is probable that setting \code{hostUsers} to \code{true} will become forbidden.
+
 \section{Services}\label{sec:svc}
 
 \subsection{Service Types}
