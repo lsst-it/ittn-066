@@ -91,11 +91,9 @@ Containers should set a fairly conservative limits to prevent suddent load spike
 \end{tabular}
 \end{center}
 
-\subsection{Priviledged Containers}
+\subsection{Priviledged Containers}\label{sec:priviledged}
 
 Privileged \code{containters} and \code{initContainers} SHALL be used only by the infrastructure team to provide platform level services.
-
-This restriction is suspended for \code{initContainers} in pods which are using multus to connect to DDS until either the need for the \code{lsstit/ddsnet4u initContainer} is removed or DDS is retired.
 
 \subsubsection{Example podSpec fragment}
 
@@ -128,7 +126,7 @@ Example:
 
 The usage of \code{PodSecurityPolicy} would prevent routine updates to k8s >= 1.25.
 
-\subsection{\code{hostPath} Volumes}
+\subsection{\code{hostPath} Volumes}\label{sec:hostpath}
 
 \code{hostPath} volumes SHALL NOT be used.
 
@@ -136,7 +134,7 @@ The usage of \code{PodSecurityPolicy} would prevent routine updates to k8s >= 1.
 
 \code{hostPath} allows access to filesystems mounted on the host. This potentially allows the container to access secrets such as \code{/etc/shadow}, escape the container via \code{/var/run/docker.sock}, modify kernel parameters via \code{/proc}, \code{/sys}, \code{/dev}, and/or edit configuration files.
 
-\subsection{Linux/Host Namespaces}
+\subsection{Linux/Host Namespaces}\label{sec:hostns}
 
 Kubernetes allows pods to ``opt-out`` of various Linux kernel namespaces which are the basis of container isolation.
 
@@ -203,6 +201,25 @@ The \code{default} namespace SHALL NOT be used.
 \subsubsection{Discussion}
 
 Resources being created within the \code{default} namespace is often an indication that a namespace was not properly specified for a deployment. It is also preferable to keep services contained within their own \code{ns} rather than mixed together in a common \code{ns}.
+
+\section{Exceptions}\label{sec:except}
+
+\subsection{DDS Pods}
+
+Pods which communicate over \href{https://en.wikipedia.org/wiki/Data_Distribution_Service}{Data Distribution Service (DDS)} have a limited exception from these policies:
+
+\begin{itemize}
+  \item \ref{sec:hostpath}
+  \item \ref{sec:hostns}
+  \item \ref{sec:priviledged}
+\end{itemize}
+
+\subsubsection{Discussion}
+
+DDS usage at the summit is in the process of being replaced with Kafka.
+The migration is envisioned to be complete before the end of CY23.
+As the remaining life time for DDS is limited, and it is planned to be retired prior to the start of Rubin Operations, it has been decided to is acceptable to exempt the existing deployments from new security policies.
+The DDS deployments do not meet the guidelines of this document MUST be retired in order for the summit to be ready for an external security audit.
 
 \appendix
 % Include all the relevant bib files.
