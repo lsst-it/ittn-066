@@ -3,9 +3,9 @@
 .. image:: https://github.com/lsst-it/ittn-066/workflows/CI/badge.svg
    :target: https://github.com/lsst-it/ittn-066/actions/
 
-#####################
-Kubernetes Use Policy
-#####################
+###################
+Kubernetes Policies
+###################
 
 ITTN-066
 ========
