@@ -59,6 +59,26 @@ In addition, to promote a stable system which provides consistent and predictabl
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all capitals, as shown here.
 
+\section{Exceptions}\label{sec:except}
+
+\subsection{DDS Pods}
+
+Pods which communicate over \href{https://en.wikipedia.org/wiki/Data_Distribution_Service}{Data Distribution Service (DDS)} have a limited exception from these policies:
+
+\begin{itemize}
+  \item \ref{sec:hostpath}
+  \item \ref{sec:hostns}
+  \item \ref{sec:priviledged}
+\end{itemize}
+
+\subsubsection{Discussion}
+
+DDS usage at the summit is in the process of being replaced with Kafka.
+The migration is envisioned to be complete before the end of CY23.
+As the remaining life time for DDS is limited, and it is planned to be retired prior to the start of Rubin Operations, it has been decided to is acceptable to exempt the existing deployments from new security policies.
+The DDS deployments do not meet the guidelines of this document MUST be retired in order for the summit to be ready for an external security audit.
+
+
 \section{Pods}\label{sec:pod}
 
 \subsection{Resource \code{requests} and \code{limits}}
@@ -201,25 +221,6 @@ The \code{default} namespace SHALL NOT be used.
 \subsubsection{Discussion}
 
 Resources being created within the \code{default} namespace is often an indication that a namespace was not properly specified for a deployment. It is also preferable to keep services contained within their own \code{ns} rather than mixed together in a common \code{ns}.
-
-\section{Exceptions}\label{sec:except}
-
-\subsection{DDS Pods}
-
-Pods which communicate over \href{https://en.wikipedia.org/wiki/Data_Distribution_Service}{Data Distribution Service (DDS)} have a limited exception from these policies:
-
-\begin{itemize}
-  \item \ref{sec:hostpath}
-  \item \ref{sec:hostns}
-  \item \ref{sec:priviledged}
-\end{itemize}
-
-\subsubsection{Discussion}
-
-DDS usage at the summit is in the process of being replaced with Kafka.
-The migration is envisioned to be complete before the end of CY23.
-As the remaining life time for DDS is limited, and it is planned to be retired prior to the start of Rubin Operations, it has been decided to is acceptable to exempt the existing deployments from new security policies.
-The DDS deployments do not meet the guidelines of this document MUST be retired in order for the summit to be ready for an external security audit.
 
 \section{Job and CronJob}\label{sec:job}
 
