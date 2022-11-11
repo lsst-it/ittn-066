@@ -223,6 +223,41 @@ The DDS deployments do not meet the guidelines of this document MUST be retired 
 
 \section{Job and CronJob}\label{sec:job}
 
+\subsection{\code{JobSpec}}
+
+All resources which which make use of \href{https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#jobspec-v1-batch}{\code{JobSpec}} are required to define the following keys:
+
+\begin{itemize}
+  \item \code{activeDeadlineSeconds}
+  \item \code{ttlSecondsAfterFinished}
+\end{itemize}
+
+\subsubsection{Maxmimum Allowed Values}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+    \bf key & \bf value (in seconds) & \bf value (in days) \\ \hline
+    \code{activeDeadlineSeconds} & 43,200 & 0.5 \\ \hline
+    \code{ttlSecondsAfterFinished} & 864,000 & 10 \\ \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Example \code{CronJobSpec} fragment}
+
+\begin{minted}{yaml}
+spec:
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      ttlSecondsAfterFinished: 172800
+\end{minted}
+
+\subsubsection{Discussion}
+
+Jobs which continue running and never exit have the potential to accumulate until all cluster resources are exhausted.
+The motivation to ensure all jobs have a limited time to live is to prevent namespaces from becoming ``polluted`` with large numbers of resources which have exited and their presence makes it difficult for a human operator to audit the ``live`` resources within a namespace.
+
 \appendix
 % Include all the relevant bib files.
 % https://lsst-texmf.lsst.io/lsstdoc.html#bibliographies
