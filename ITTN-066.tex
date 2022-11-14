@@ -59,6 +59,26 @@ In addition, to promote a stable system which provides consistent and predictabl
 
 The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 [RFC2119] [RFC8174] when, and only when, they appear in all capitals, as shown here.
 
+\section{Exceptions}\label{sec:except}
+
+\subsection{DDS Pods}
+
+Pods which communicate over \href{https://en.wikipedia.org/wiki/Data_Distribution_Service}{Data Distribution Service (DDS)} have a limited exception from these policies:
+
+\begin{itemize}
+  \item \ref{sec:hostpath}
+  \item \ref{sec:hostns}
+  \item \ref{sec:priviledged}
+\end{itemize}
+
+\subsubsection{Discussion}
+
+DDS usage at the summit is in the process of being replaced with Kafka.
+The migration is envisioned to be complete before the end of CY23.
+As the remaining life time for DDS is limited, and it is planned to be retired prior to the start of Rubin Operations, it has been decided to is acceptable to exempt the existing deployments from new security policies.
+The DDS deployments do not meet the guidelines of this document MUST be retired in order for the summit to be ready for an external security audit.
+
+
 \section{Pods}\label{sec:pod}
 
 \subsection{Resource \code{requests} and \code{limits}}
@@ -202,24 +222,42 @@ The \code{default} namespace SHALL NOT be used.
 
 Resources being created within the \code{default} namespace is often an indication that a namespace was not properly specified for a deployment. It is also preferable to keep services contained within their own \code{ns} rather than mixed together in a common \code{ns}.
 
-\section{Exceptions}\label{sec:except}
+\section{Job and CronJob}\label{sec:job}
 
-\subsection{DDS Pods}
+\subsection{\code{JobSpec}}
 
-Pods which communicate over \href{https://en.wikipedia.org/wiki/Data_Distribution_Service}{Data Distribution Service (DDS)} have a limited exception from these policies:
+All resources which which make use of \href{https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.23/#jobspec-v1-batch}{\code{JobSpec}} are required to define the following keys:
 
 \begin{itemize}
-  \item \ref{sec:hostpath}
-  \item \ref{sec:hostns}
-  \item \ref{sec:priviledged}
+  \item \code{activeDeadlineSeconds}
+  \item \code{ttlSecondsAfterFinished}
 \end{itemize}
+
+\subsubsection{Maxmimum Allowed Values}
+
+\begin{center}
+\begin{tabular}{|l|l|l|}
+\hline
+    \bf key & \bf value (in seconds) & \bf value (in days) \\ \hline
+    \code{activeDeadlineSeconds} & 43,200 & 0.5 \\ \hline
+    \code{ttlSecondsAfterFinished} & 864,000 & 10 \\ \hline
+\end{tabular}
+\end{center}
+
+\subsubsection{Example \code{CronJobSpec} fragment}
+
+\begin{minted}{yaml}
+spec:
+  jobTemplate:
+    spec:
+      activeDeadlineSeconds: 3600
+      ttlSecondsAfterFinished: 172800
+\end{minted}
 
 \subsubsection{Discussion}
 
-DDS usage at the summit is in the process of being replaced with Kafka.
-The migration is envisioned to be complete before the end of CY23.
-As the remaining life time for DDS is limited, and it is planned to be retired prior to the start of Rubin Operations, it has been decided to is acceptable to exempt the existing deployments from new security policies.
-The DDS deployments do not meet the guidelines of this document MUST be retired in order for the summit to be ready for an external security audit.
+Jobs which continue running and never exit have the potential to accumulate until all cluster resources are exhausted.
+The motivation to ensure all jobs have a limited time to live is to prevent namespaces from becoming ``polluted`` with large numbers of resources which have exited and their presence makes it difficult for a human operator to audit the ``live`` resources within a namespace.
 
 \appendix
 % Include all the relevant bib files.
