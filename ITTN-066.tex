@@ -197,19 +197,11 @@ If k8s \code{userns} support reaches ``GA`` in a future release, it is probable 
 
 \subsection{Running as Root}\label{sec:nonroot}
 
-Processes of containers SHALL NOT run as root. 
+It is NOT RECOMMENDED to run processes of containers as root. 
 
 \subsubsection{Discussion}
 
 Exploited applications could allow an attacker to obtain shell access as root. 
-
-\subsection{Disable Service Discovery}\label{sec:discovery}
-
-Pods that do not need to lookup services MUST have this feature disabled. 
-
-\subsubsection{Discussion}
-
-Some pods may not need to lookup or call in-cluster services, this can blocked by not using CodeDNS or not exposing environmental variables. 
 
 \subsection{Read-only Root filesystems}\label{sec:roroot}
 
