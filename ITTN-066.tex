@@ -194,6 +194,23 @@ Pods MAY set \code{hostUsers} to \code{true} but it is NOT RECOMMENDED.
 As of k8s 1.25, \code{true} is the default value.
 If k8s \code{userns} support reaches ``GA`` in a future release, it is probable that setting \code{hostUsers} to \code{true} will become forbidden.
 
+
+\subsection{Running as Root}\label{sec:nonroot}
+
+It is NOT RECOMMENDED to run processes of containers as root. 
+
+\subsubsection{Discussion}
+
+Exploited applications could allow an attacker to obtain shell access as root. 
+
+\subsection{Read-only Root filesystems}\label{sec:roroot}
+
+Root filesystems of images SHALL be configured as read-only.
+
+\subsubsection{Discussion}
+
+This prevents an attacker to modify binaries of the application. If it's necessary to write to the filesystem, use temporary directories or mount volumes
+
 \section{Services}\label{sec:svc}
 
 \subsection{Service Types}
