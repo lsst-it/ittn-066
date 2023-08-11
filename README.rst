@@ -10,7 +10,7 @@ Kubernetes Policies
 ITTN-066
 ========
 
-Requirements and restrictions for services deployment upon Rubin Kubernetes clusters.
+Requirements and restrictions for services deployed upon Rubin Kubernetes clusters.
 
 Links
 =====
